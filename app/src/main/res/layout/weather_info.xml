@@ -125,13 +125,15 @@
                     android:orientation="horizontal">
                     <!--pm2.5数值-->
                     <TextView
+                        android:id="@+id/pm25_data"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="100"
                         android:textSize="20dp"
                         android:textColor="@android:color/white"/>
-                    <!--空气情况-->
+                    <!--空气质量情况-->
                     <TextView
+                        android:id="@+id/pm25_quality"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="轻度污染"
@@ -187,6 +189,7 @@
                     android:textColor="@android:color/white"/>
                 <!--星期几-->
                 <TextView
+                    android:id="@+id/today_week"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="星期六"

@@ -7,6 +7,9 @@ import android.net.NetworkInfo;
  * Created by 晓白 on 2017/1/15.
  */
 
+/**
+ * 网络状态检查
+ */
 public class NetUtil{
     public static final int NETWORN_NONE=0;
     public static final int NETWORN_WIFI=1;
