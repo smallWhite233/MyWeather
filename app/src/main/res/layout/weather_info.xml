@@ -77,7 +77,7 @@
                 android:text="北京"
                 android:textSize="30.0sp"
                 android:textColor="#FFFFFF"/>
-            <!---今日天气信息-->
+            <!---今日天气信息块-->
             <RelativeLayout
                 android:id="@+id/weather_today_data"
                 android:layout_below="@+id/city"
@@ -99,19 +99,12 @@
                     android:layout_below="@+id/condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="-2°~5°"
-                    android:textSize="40.0sp"
-                    android:textColor="@android:color/white"/>
-                <!--风力信息-->
-                <TextView
-                    android:id="@+id/wind"
-                    android:layout_below="@+id/temperature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_centerHorizontal="true"
-                    android:text="微风"
-                    android:textSize="20sp"/>
+                    android:text="-2°~5°"
+                    android:textSize="50.0sp"
+                    android:textColor="@android:color/white"/>
+
             </RelativeLayout>
             <!--pm2.5-->
             <LinearLayout
@@ -119,19 +112,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/weather_today_data"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
                 android:orientation="vertical">
-                <!--pm2.5-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="pm2.5"
-                    android:textSize="20sp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@android:color/white"
-                    />
                 <!--pm2.5详情-->
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -157,15 +140,22 @@
                         android:textColor="@android:color/white"/>
                 </LinearLayout>
             </LinearLayout>
-            <!--湿度情况-->
+            <!--湿度和风力-->
             <LinearLayout
-                android:id="@+id/humidity"
-                android:layout_below="@+id/weather_today_data"
+                android:layout_below="@+id/pm2_5_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
+                <!--风力信息-->
+                <TextView
+                    android:id="@+id/wind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="微风"
+                    android:textSize="20sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -185,8 +175,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/pm2_5_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
                 android:layout_alignParentBottom="true"
                 android:orientation="horizontal">
                 <TextView
@@ -201,6 +190,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="星期六"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/white"/>
+            </LinearLayout>
+            <!--发布时间-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal">
+                <!--发布时间-->
+                <TextView
+                    android:id="@+id/updatetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="14:55"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="发布"
                     android:textSize="20dp"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
