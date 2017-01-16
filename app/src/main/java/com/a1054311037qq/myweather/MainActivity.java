@@ -1,6 +1,8 @@
 package com.a1054311037qq.myweather;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,29 +15,48 @@ import com.a1054311037qq.bean.TodayWeather;
 import com.a1054311037qq.util.NetUtil;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private ImageView mUpdateBtn;
-    private	TextView city_name_Tv,cityTv,timeTv,humidityTv,weekTv,pmDataTv,pmQualityTv,temperatureTv,climateTv,windTv;
+    private	TextView city_name_Tv,cityTv,timeTv,humidityTv,weekTv,pmDataTv,pmQualityTv,temperatureTv,temperature_range_Tv,climateTv,windTv,wind_degree_Tv;
     private	ImageView weatherImg,pmImg;
 
+    private static final int UPDATE_TODAY_WEATHER=1;//定义一个变量用来判断状态
+    /**
+     * 消息机制
+     */
+    private Handler mhandler=new Handler(){
+        public void handleMessage(android.os.Message msg){//为子线程提供一个mhandler,当子线程完成时提交消息给主线程(MainActivity)，主线程调用对应函数,更新信息
+            switch (msg.what){
+                case UPDATE_TODAY_WEATHER:
+                    updateTodayWeather((TodayWeather) msg.obj);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_info);
         mUpdateBtn=(ImageView)findViewById(R.id.title_update_btn);
         mUpdateBtn.setOnClickListener(this);//设置点击按钮的监听器
+
         if (NetUtil.getNetworkState(this)!=NetUtil.NETWORN_NONE){
             Log.d("myWeather","网络已连接");//Log类用来查看调试信息
-            Toast.makeText(MainActivity.this,"网络已连接！",Toast.LENGTH_LONG).show();
+            /*Toast.makeText(MainActivity.this,"网络已连接！",Toast.LENGTH_LONG).show();*/
+            //queryWeatherCode(cityCode);//当网络连接时，自动更新当前城市天气数据
         }
         else{
             Log.d("myWeather","网络未连接！");
@@ -44,18 +65,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
     }
     /**
-     * 初始化控件内容
+     * 获取对应的控件id，初始化控件内容
      */
     void initView(){
         city_name_Tv=(TextView)findViewById(R.id.title_city_name);//某某城市天气
         cityTv=(TextView)findViewById(R.id.city);//城市名
         timeTv=(TextView)findViewById(R.id.updatetime);//发布时间
-        humidityTv=(TextView)findViewById(R.id.humidity);//湿度
-        climateTv=(TextView)findViewById(R.id.condition);//天气状况类型,晴或雨...
-        temperatureTv=(TextView)findViewById(R.id.temperature);//温度
+        humidityTv=(TextView)findViewById(R.id.humdity);//湿度
+        climateTv=(TextView)findViewById(R.id.weather_type);//天气状况类型,晴或雨...
+        temperatureTv=(TextView)findViewById(R.id.temperature);//当前温度
+        temperature_range_Tv=(TextView)findViewById(R.id.temperature_range);//今日温度范围
         pmDataTv=(TextView)findViewById(R.id.pm25_data);//pm2.5数值
         pmQualityTv=(TextView)findViewById(R.id.pm25_quality);//空气质量
-        windTv=(TextView)findViewById(R.id.wind);//风力
+        windTv=(TextView)findViewById(R.id.wind);//风向
+        wind_degree_Tv=(TextView)findViewById(R.id.wind_degree);//风力
         weekTv=(TextView)findViewById(R.id.today_week);//今日星期
 
         city_name_Tv.setText("N/A");
@@ -64,14 +87,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         humidityTv.setText("N/A");
         climateTv.setText("N/A");
         temperatureTv.setText("N/A");
+        temperature_range_Tv.setText("N/A");
         pmDataTv.setText("N/A");
         pmQualityTv.setText("N/A");
         windTv.setText("N/A");
+        wind_degree_Tv.setText("N/A");
         weekTv.setText("N/A");
     }
     /**
      *
-     * @param view 检查网络状态，调用查询天气函数
+     * @param view 点击事件：检查网络状态，并调用查询函数
      */
     @Override
     public void onClick(View view){
@@ -92,11 +117,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     /**
-    *@param cityCode 查询天气数据
+    *@param cityCode 查询天气数据的线程
     */
     private void queryWeatherCode(String cityCode){
         final String address="http://wthrcdn.etouch.cn/WeatherApi?citykey="+cityCode;//通过城市id获取其天气的url地址
         Log.d("myWeather",address);
+        //子线程
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,7 +148,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     todayWeather=parseXML(responseStr);
                     if (todayWeather!=null){
                         Log.d("myWeather",todayWeather.toString());//调试今日天气信息
+
+                        Message msg=new Message();
+                        msg.what=UPDATE_TODAY_WEATHER;//设置msg消息状态
+                        msg.obj=todayWeather;//msg消息内容是todayWeather对象
+                        mhandler.sendMessage(msg);
                     }
+
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -135,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }).start();
     }
     /**
-     * 网络数据解析的函数
+     * 网络数据解析函数
      */
     private TodayWeather parseXML(String xmldata){
         TodayWeather todayWeather=null;
@@ -150,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             XmlPullParserFactory fac=XmlPullParserFactory.newInstance();
             XmlPullParser xmlPullParser=fac.newPullParser();
-            xmlPullParser.setInput(new	StringReader(xmldata));
+            xmlPullParser.setInput(new StringReader(xmldata));
             int	eventType=xmlPullParser.getEventType();
             Log.d("myWeather","parseXML");
             while (eventType!= XmlPullParser.END_DOCUMENT){
@@ -168,23 +200,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 eventType=xmlPullParser.next();
                                 todayWeather.setCity(xmlPullParser.getText());
                             }
-                            else if ((xmlPullParser.getName().equals("updatetime")){
+                            else if (xmlPullParser.getName().equals("updatetime")){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setUpdatetime(xmlPullParser.getText());
                             }
-                            else if ((xmlPullParser.getName().equals("wendu")){
+                            else if (xmlPullParser.getName().equals("wendu")){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setWendu(xmlPullParser.getText());
                             }
-                            else if ((xmlPullParser.getName().equals("pm25")){
+                            else if (xmlPullParser.getName().equals("pm25")){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setPm25(xmlPullParser.getText());
                             }
-                            else if ((xmlPullParser.getName().equals("quality")){
+                            else if (xmlPullParser.getName().equals("quality")){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setQuality(xmlPullParser.getText());
                             }
-                            else if ((xmlPullParser.getName().equals("shidu")){
+                            else if (xmlPullParser.getName().equals("shidu")){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setShidu(xmlPullParser.getText());
                             }
@@ -200,17 +232,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             else if ((xmlPullParser.getName().equals("high")&&highCount==0)){
                                 eventType=xmlPullParser.next();
-                                todayWeather.setHigh(xmlPullParser.getText());
+                                todayWeather.setHigh(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
                                 highCount++;
                             }
                             else if ((xmlPullParser.getName().equals("low")&&lowCount==0)){
                                 eventType=xmlPullParser.next();
-                                todayWeather.setLow(xmlPullParser.getText());
+                                todayWeather.setLow(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
                                 lowCount++;
                             }
                             else if ((xmlPullParser.getName().equals("date")&&dateCount==0)){
                                 eventType=xmlPullParser.next() ;
-                                todayWeather.setDate(xmlPullParser.getText());
+                                todayWeather.setDate(xmlPullParser.getText().substring(3));//去掉几日，只保留星期
                                 dateCount++;
                             }
                             else if ((xmlPullParser.getName().equals("type")&&typeCount==0)){
@@ -233,6 +265,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
         return todayWeather;
+    }
+    /**
+     * updateTodayWeather函数,利用TodayWeather对象更新UI中控件的数据
+     */
+    void updateTodayWeather(TodayWeather todayWeather){
+        city_name_Tv.setText(todayWeather.getCity()+"天气");
+        cityTv.setText(todayWeather.getCity());
+        timeTv.setText(todayWeather.getUpdatetime());//发布时间
+        humidityTv.setText(todayWeather.getShidu());
+        climateTv.setText(todayWeather.getType());
+        temperatureTv.setText(todayWeather.getWendu()+"°");//当前温度
+        temperature_range_Tv.setText(todayWeather.getLow()+"~"+todayWeather.getHigh());//今日温度范围
+        pmDataTv.setText(todayWeather.getPm25());
+        pmQualityTv.setText(todayWeather.getQuality());
+        windTv.setText(todayWeather.getFengxiang());
+        wind_degree_Tv.setText(todayWeather.getFengli());
+        weekTv.setText(todayWeather.getDate());//今日星期
+
+        Toast.makeText(MainActivity.this,"更新成功",Toast.LENGTH_SHORT).show();
     }
 
 }
