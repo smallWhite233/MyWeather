@@ -32,8 +32,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private	ImageView weatherImg,pmImg;
 
     private static final int UPDATE_TODAY_WEATHER=1;//定义一个变量用来判断状态
+
     /**
-     * 消息机制
+     * 消息机制 Handler
      */
     private Handler mhandler=new Handler(){
         public void handleMessage(android.os.Message msg){//为子线程提供一个mhandler,当子线程完成时提交消息给主线程(MainActivity)，主线程调用对应函数,更新信息
@@ -46,24 +47,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     };
+
+    /**
+     * @param savedInstanceState 新建
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.weather_info);
+        setContentView(R.layout.weather_info);//加载界面
+
         mUpdateBtn=(ImageView)findViewById(R.id.title_update_btn);
-        mUpdateBtn.setOnClickListener(this);//设置点击按钮的监听器
+        mUpdateBtn.setOnClickListener(this);//设置刷新按钮的点击监听器
+
+        initView();
+        //初始化之后，判断网络状态，直接加载数据
+        SharedPreferences sharedPreferences=getSharedPreferences("config",MODE_PRIVATE);
+        String cityCode=sharedPreferences.getString("main_city_code","101010100");//读取城市id
+        Log.d("myWeather",cityCode);
 
         if (NetUtil.getNetworkState(this)!=NetUtil.NETWORN_NONE){
             Log.d("myWeather","网络已连接");//Log类用来查看调试信息
-            /*Toast.makeText(MainActivity.this,"网络已连接！",Toast.LENGTH_LONG).show();*/
-            //queryWeatherCode(cityCode);//当网络连接时，自动更新当前城市天气数据
+            queryWeatherCode(cityCode);//通过城市id查询其天气
         }
         else{
             Log.d("myWeather","网络未连接！");
             Toast.makeText(MainActivity.this,"网络未连接！",Toast.LENGTH_LONG).show();
         }
-        initView();
     }
+
     /**
      * 获取对应的控件id，初始化控件内容
      */
@@ -94,9 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         wind_degree_Tv.setText("N/A");
         weekTv.setText("N/A");
     }
+
     /**
-     *
-     * @param view 点击事件：检查网络状态，并调用查询函数
+     * @param view 点击函数：检查网络状态，并调用查询函数
      */
     @Override
     public void onClick(View view){
@@ -116,8 +127,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
     /**
-    *@param cityCode 查询天气数据的线程
+    *@param cityCode 查询天气数据的子线程
     */
     private void queryWeatherCode(String cityCode){
         final String address="http://wthrcdn.etouch.cn/WeatherApi?citykey="+cityCode;//通过城市id获取其天气的url地址
@@ -145,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String responseStr=response.toString();//获取的天气数据
                     Log.d("myWeather",responseStr);
 
-                    todayWeather=parseXML(responseStr);
+                    todayWeather=parseXML(responseStr);//调用解析函数
                     if (todayWeather!=null){
                         Log.d("myWeather",todayWeather.toString());//调试今日天气信息
 
@@ -166,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }).start();
     }
+
     /**
      * 网络数据解析函数
      */
@@ -266,8 +279,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return todayWeather;
     }
+
     /**
-     * updateTodayWeather函数,利用TodayWeather对象更新UI中控件的数据
+     * updateTodayWeather函数,利用TodayWeather对象更新UI控件的数据
      */
     void updateTodayWeather(TodayWeather todayWeather){
         city_name_Tv.setText(todayWeather.getCity()+"天气");
