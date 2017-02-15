@@ -4,16 +4,22 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/><!--获取网络状态权限-->
     <uses-permission android:name="android.permission.INTERNET"/><!--添加网络访问权限-->
     <application
+        android:name="com.a1054311037qq.app.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="MyWeather"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+
+        <activity android:name=".SelectCity"><!--exported，允许当前组件被调用-->
+
         </activity>
 
     </application>

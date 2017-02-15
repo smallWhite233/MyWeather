@@ -4,59 +4,6 @@
     android:layout_height="match_parent">
 <!--长度宽度距离使用dp，字体大小使用sp随系统字体大小变化-->
     <!--顶部栏-->
-    <RelativeLayout
-        android:id="@+id/title"
-        android:layout_width="fill_parent"
-        android:layout_height="45.0dip"
-        android:background="#4052B5"
-        android:gravity="center_vertical">
-        <!---选择城市-->
-    <ImageView
-        android:id="@+id/title_city_manager"
-        android:layout_width="45.0dip"
-        android:layout_height="45.0dip"
-        android:src="@drawable/title_city"/>
-    <!--<ImageView
-        android:id="@+id/city_seperator"
-        android:layout_width="1.0dip"
-        android:layout_height="40dip"
-        android:layout_marginTop="2.0dip"
-        android:layout_toRightOf="@id/title_city_manager"
-        android:background="#FFFFFF"	/>-->
-        <!---城市天气标题-->
-    <TextView
-        android:id="@+id/title_city_name"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_toRightOf="@id/title_city_manager"
-        android:gravity="center_vertical"
-        android:paddingLeft="5dip"
-        android:text="北京天气"
-        android:textColor="#ffffffff"
-        android:textSize="22.0sp"/>
-        <!--刷新-->
-    <ImageView
-        android:id="@+id/title_update_btn"
-        android:layout_width="45.0dip"
-        android:layout_height="45.0dip"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center"
-        android:src="@drawable/title_update"
-        android:visibility="visible"/>
-    <!--<ImageView<-分享按钮->
-        android:id="@+id/title_share"
-        android:layout_width="45.0dip"
-        android:layout_height="45.0dip"
-        android:layout_toLeftOf="@id/title_update_btn"
-        android:src="@drawable/title_share"/>-->
-        <!--定位-->
-        <ImageView
-        android:id="@+id/title_location"
-        android:layout_width="45.0dip"
-        android:layout_height="45.0dip"
-        android:layout_toLeftOf="@id/title_update_btn"
-        android:src="@drawable/base_action_bar_action_city"/>
-    </RelativeLayout>
     <!--主内容区域-->
     <LinearLayout
         android:layout_below="@id/title"
@@ -97,7 +44,8 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:text="小雪"
-                    android:textSize="20.0sp"/>
+                    android:textSize="20.0sp"
+                    android:textColor="#FFFFFF"/>
                 <!--当前温度-->
                 <TextView
                     android:id="@+id/temperature"
@@ -399,4 +347,61 @@
         </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="45.0dip"
+        android:background="#4052B5"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"><!--垂直居中-->
+        <!---选择城市-->
+    <ImageView
+        android:id="@+id/title_city_manager"
+        android:layout_width="45.0dip"
+        android:layout_height="45.0dip"
+        android:src="@drawable/title_city"/>
+    <!--<ImageView
+        android:id="@+id/city_seperator"
+        android:layout_width="1.0dip"
+        android:layout_height="40dip"
+        android:layout_marginTop="2.0dip"
+        android:layout_toRightOf="@id/title_city_manager"
+        android:background="#FFFFFF"	/>-->
+        <!---城市天气标题-->
+    <TextView
+        android:id="@+id/title_city_name"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@id/title_city_manager"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dip"
+        android:text="北京天气"
+        android:textColor="#FFFFFF"
+        android:textSize="22.0sp"/>
+        <!--刷新-->
+    <ImageView
+        android:id="@+id/title_update_btn"
+        android:layout_width="45.0dip"
+        android:layout_height="45.0dip"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center"
+        android:src="@drawable/title_update"
+        android:visibility="visible"/>
+    <!--<ImageView<-分享按钮->
+        android:id="@+id/title_share"
+        android:layout_width="45.0dip"
+        android:layout_height="45.0dip"
+        android:layout_toLeftOf="@id/title_update_btn"
+        android:src="@drawable/title_share"/>-->
+        <!--定位-->
+        <ImageView
+        android:id="@+id/title_location"
+        android:layout_width="45.0dip"
+        android:layout_height="45.0dip"
+        android:layout_toLeftOf="@id/title_update_btn"
+        android:src="@drawable/base_action_bar_action_city"/>
+    </RelativeLayout>
 </RelativeLayout>
