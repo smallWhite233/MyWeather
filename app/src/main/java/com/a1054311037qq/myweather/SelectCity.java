@@ -43,14 +43,18 @@ public class SelectCity extends Activity implements View.OnClickListener{
 
         mBackBtn=(ImageView)findViewById(R.id.title_back);
         mBackBtn.setOnClickListener(this);
-
         mTitleName=(TextView)findViewById(R.id.title_select_name);
-
         mListView=(ListView)findViewById(R.id.list_view_select);//城市列表
 
         CityList=(MyApplication) getApplication();//MyApplication对象
         mCityList=CityList.getCityList();//获取MyApplication对象的城市列表函数
         //ArrayList<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
+
+        Intent intent=getIntent();//获取传递过来的数据
+        String cityN=intent.getStringExtra("cityName");
+        mTitleName.setText("当前城市: "+cityN);
+        System.out.println(cityN);
+
         int i=0;
         final ArrayList<String> mdata=new ArrayList<String>();
         final ArrayList<String> mdata1=new ArrayList<String>();
@@ -71,8 +75,6 @@ public class SelectCity extends Activity implements View.OnClickListener{
             }
             else{
                 mdata.add("白");
-                //item.put("i",i);
-                //mdata.add(item);
             }
         }
         final ArrayAdapter adapter=new ArrayAdapter<String>(SelectCity.this,android.R.layout.simple_list_item_1,mdata);
@@ -104,10 +106,7 @@ public class SelectCity extends Activity implements View.OnClickListener{
      */
     public void updateCity(Intent data){
         mTitleName.setText("当前城市: "+data.getStringExtra("cityName")/*+data.getStringExtra("cityCode")*/);
-        /*String cityCode=data.getStringExtra("cityCode");
-        Intent ii=new Intent();
-        ii.putExtra("newcityCode",cityCode);//ii传递城市代码*//*
-        Log.d("城市代码：",cityCode);*/
+
 }
 
     /**
@@ -119,11 +118,11 @@ public class SelectCity extends Activity implements View.OnClickListener{
             case R.id.title_back:
                 //传递数据
                 Intent i=new Intent();
-                Intent data=new Intent();//设置获取对象
+
                 SharedPreferences sharedPreferences=getSharedPreferences("shared",MODE_PRIVATE);
                 String newcityCode=sharedPreferences.getString("cityCode","101020100");//读取城市id
-                //String cityCode=data.getStringExtra("cityCode");
                 Log.d("点击返回的城市代码：",newcityCode);
+
                 i.putExtra("cityCode",newcityCode);//第二个参数是缺省值"101020100"上海
                 setResult(RESULT_OK,i);//i传递城市代码
 

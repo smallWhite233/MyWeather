@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,6 +45,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
             switch (msg.what){
                 case UPDATE_TODAY_WEATHER:
                     updateTodayWeather((TodayWeather) msg.obj);//更新今日天气数据
+                    String city1=((TodayWeather) msg.obj).getCity().toString();
+
                     break;
                 default:
                     break;
@@ -63,15 +66,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
         mUpdateBtn=(ImageView)findViewById(R.id.title_update_btn);
         mUpdateBtn.setOnClickListener(this);
 
-
-        //初始化之后，判断网络状态，直接加载数据
-        SharedPreferences sharedPreferences=getSharedPreferences("config",MODE_PRIVATE);
-        String cityCode=sharedPreferences.getString("cityCode","101010100");//读取城市id
+        //初始化之后，判断网络状态，直接加载缓存数据
+        SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String cityCode=sharedPreferences.getString("cityCode",null);//读取城市id 北京101010100
         Log.d("myWeather",cityCode);
 
         if (NetUtil.getNetworkState(this)!=NetUtil.NETWORN_NONE){
             Log.d("myWeather","网络已连接");//Log类用来查看调试信息
-            queryWeatherCode(cityCode);//通过城市id查询其天气
+            if (cityCode!=null||cityCode!=" ") {
+                queryWeatherCode(cityCode);
+            }
+            else{
+                initView();
+            }
         }
         else{
             Log.d("myWeather","网络未连接！");
@@ -123,8 +130,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
     public void onClick(View view){
         //刷新
         if (view.getId()==R.id.title_update_btn){
-            SharedPreferences sharedPreferences=getSharedPreferences("config",MODE_PRIVATE);
-            String cityCode=sharedPreferences.getString("cityCode","101010100");//读取城市id
+            SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+            String cityCode=sharedPreferences.getString("cityCode",null);//读取城市id 北京101010100
             Log.d("myWeather",cityCode);
             //检查网络状态，并调用查询函数
             if (NetUtil.getNetworkState(this)!=NetUtil.NETWORN_NONE){
@@ -139,9 +146,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
         }
         //选择城市
         if (view.getId()==R.id.title_city_manager){
-            //跳转到SelectCity活动
-            Intent i=new Intent(this,SelectCity.class);
-            startActivityForResult(i,1);//1是请求码requestCode
+            //获取缓存的城市名称
+            SharedPreferences sharedPreferences=getSharedPreferences("cityData",MODE_PRIVATE);
+            String cityname=sharedPreferences.getString("cityName","请选择");//读取城市id
+
+            // 跳转到SelectCity活动
+            Intent intent=new Intent(this,SelectCity.class);
+            intent.putExtra("cityName",cityname);//传递城市名称
+            startActivityForResult(intent,1);//1是请求码requestCode
         }
     }
 
@@ -152,6 +164,10 @@ public class MainActivity extends Activity implements View.OnClickListener{
         if (requestCode==1&&resultCode==RESULT_OK){
             String newCityCode=data.getStringExtra("cityCode");
             Log.d("myWeather","选择的城市代码为："+newCityCode);
+            //缓存当前城市代码
+            SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+            editor.putString("cityCode",newCityCode);
+            editor.apply();
 
             //检查网络状态，并调用查询函数
             if (NetUtil.getNetworkState(this)!=NetUtil.NETWORN_NONE){
@@ -171,6 +187,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private void queryWeatherCode(String cityCode){
         final String address="http://wthrcdn.etouch.cn/WeatherApi?citykey="+cityCode;//通过城市id获取其天气的url地址
         Log.d("myWeather",address);
+        //缓存当前城市代码
+        SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+        editor.putString("cityCode",cityCode);
+
+        editor.apply();
+
         //子线程
         new Thread(new Runnable() {
             @Override
@@ -188,7 +210,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                     StringBuilder response=new StringBuilder();
                     String str;
                     while ((str=reader.readLine())!=null){
-                        response.append(str);//添加 读取的每一行数据
+                        response.append(str);//添加 读到的每一行数据
                         Log.d("myWeather",str);//天气数据
                     }
                     String responseStr=response.toString();//获取的天气数据
@@ -261,6 +283,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                             else if (xmlPullParser.getName().equals("pm25")){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setPm25(xmlPullParser.getText());
+
                             }
                             else if (xmlPullParser.getName().equals("quality")){
                                 eventType=xmlPullParser.next();
@@ -302,6 +325,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
                             }
                         }
                         break;
+
+
                     //判断当前事件是否为标签元素结束事件
                     case XmlPullParser.END_TAG:
                         break;
@@ -320,7 +345,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
     /**
      * updateTodayWeather函数,利用TodayWeather对象更新UI控件的数据
      */
-    void updateTodayWeather(TodayWeather todayWeather){
+    public void updateTodayWeather(TodayWeather todayWeather){
+        //缓存城市信息
+        SharedPreferences.Editor editor=getSharedPreferences("cityData",MODE_PRIVATE).edit();
+        editor.putString("cityName",todayWeather.getCity());//缓存城市名称
+        editor.apply();
+
         city_name_Tv.setText(todayWeather.getCity()+"天气");
         cityTv.setText(todayWeather.getCity());
         timeTv.setText(todayWeather.getUpdatetime());//发布时间
@@ -328,11 +358,16 @@ public class MainActivity extends Activity implements View.OnClickListener{
         climateTv.setText(todayWeather.getType());
         temperatureTv.setText(todayWeather.getWendu()+"°");//当前温度
         temperature_range_Tv.setText(todayWeather.getLow()+"~"+todayWeather.getHigh());//今日温度范围
-        pmDataTv.setText(todayWeather.getPm25());
-        pmQualityTv.setText(todayWeather.getQuality());
         windTv.setText(todayWeather.getFengxiang());
         wind_degree_Tv.setText(todayWeather.getFengli());
         weekTv.setText(todayWeather.getDate());//今日星期
+        if (todayWeather.getPm25()==null){
+            pmDataTv.setText("暂无pm2.5信息");
+        }
+        else {
+            pmDataTv.setText(todayWeather.getPm25());
+        }
+        pmQualityTv.setText(todayWeather.getQuality());
 
         Toast.makeText(MainActivity.this,"更新成功",Toast.LENGTH_SHORT).show();
     }
