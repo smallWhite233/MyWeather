@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a1054311037qq.bean.TodayWeather;
+import com.a1054311037qq.bean.FutureWeather;
 import com.a1054311037qq.util.NetUtil;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -33,6 +34,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private ImageView mSelectCity;
     private	TextView city_name_Tv,cityTv,timeTv,humidityTv,weekTv,pmDataTv,pmQualityTv,temperatureTv,temperature_range_Tv,climateTv,windTv,wind_degree_Tv;
     private	ImageView weatherImg,pmImg;
+    private TextView future1_date,future1_type,future1_range,future2_date,future2_type,future2_range,
+            future3_date,future3_type,future3_range,future4_date,future4_type,future4_range;
 
     private static final int UPDATE_TODAY_WEATHER=1;//定义一个变量用来判断状态
 
@@ -66,7 +69,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         mUpdateBtn=(ImageView)findViewById(R.id.title_update_btn);
         mUpdateBtn.setOnClickListener(this);
 
-        //初始化之后，判断网络状态，直接加载缓存数据
+        //初始化之后，判断网络状态，直接加载缓存的城市代码
         SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String cityCode=sharedPreferences.getString("cityCode",null);//读取城市id 北京101010100
         Log.d("myWeather",cityCode);
@@ -107,6 +110,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
         windTv=(TextView)findViewById(R.id.wind);//风向
         wind_degree_Tv=(TextView)findViewById(R.id.wind_degree);//风力
         weekTv=(TextView)findViewById(R.id.today_week);//今日星期
+        //未来四天
+        future1_date=(TextView)findViewById(R.id.future1_date);
+        future1_type=(TextView)findViewById(R.id.future1_type);
+        future1_range=(TextView)findViewById(R.id.future1_temperature);
+        future2_date=(TextView)findViewById(R.id.future2_date);
+        future2_type=(TextView)findViewById(R.id.future2_type);
+        future2_range=(TextView)findViewById(R.id.future2_temperature);
+        future3_date=(TextView)findViewById(R.id.future3_date);
+        future3_type=(TextView)findViewById(R.id.future3_type);
+        future3_range=(TextView)findViewById(R.id.future3_temperature);
+        future4_date=(TextView)findViewById(R.id.future4_date);
+        future4_type=(TextView)findViewById(R.id.future4_type);
+        future4_range=(TextView)findViewById(R.id.future4_temperature);
 
         city_name_Tv.setText("N/A");
         cityTv.setText("N/A");
@@ -120,6 +136,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
         windTv.setText("N/A");
         wind_degree_Tv.setText("N/A");
         weekTv.setText("N/A");
+
+
     }
 
     /**
@@ -283,7 +301,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
                             else if (xmlPullParser.getName().equals("pm25")){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setPm25(xmlPullParser.getText());
-
                             }
                             else if (xmlPullParser.getName().equals("quality")){
                                 eventType=xmlPullParser.next();
@@ -303,6 +320,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                 todayWeather.setFengli(xmlPullParser.getText());
                                 fengliCount++;
                             }
+                            else if ((xmlPullParser.getName().equals("date")&&dateCount==0)){
+                                eventType=xmlPullParser.next() ;
+                                todayWeather.setDate(xmlPullParser.getText().substring(3));//去掉几日，只保留星期
+                                dateCount++;
+                            }
                             else if ((xmlPullParser.getName().equals("high")&&highCount==0)){
                                 eventType=xmlPullParser.next();
                                 todayWeather.setHigh(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
@@ -313,14 +335,93 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                 todayWeather.setLow(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
                                 lowCount++;
                             }
-                            else if ((xmlPullParser.getName().equals("date")&&dateCount==0)){
-                                eventType=xmlPullParser.next() ;
-                                todayWeather.setDate(xmlPullParser.getText().substring(3));//去掉几日，只保留星期
-                                dateCount++;
-                            }
                             else if ((xmlPullParser.getName().equals("type")&&typeCount==0)){
                                 eventType=xmlPullParser.next() ;
                                 todayWeather.setType(xmlPullParser.getText());
+                                typeCount++;
+                            }
+                            //未来第一天
+                            else if ((xmlPullParser.getName().equals("date")&&dateCount==1)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setDate1(xmlPullParser.getText().substring(3));
+                                dateCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("high")&&highCount==1)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setHigh1(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                highCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("low")&&lowCount==1)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setLow1(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                lowCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("type")&&typeCount==1)){
+                                eventType=xmlPullParser.next() ;
+                                todayWeather.setType1(xmlPullParser.getText());
+                                typeCount++;
+                            }
+                            //未来第二天
+                            else if ((xmlPullParser.getName().equals("date")&&dateCount==2)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setDate2(xmlPullParser.getText().substring(3));
+                                dateCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("high")&&highCount==2)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setHigh2(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                highCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("low")&&lowCount==2)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setLow2(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                lowCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("type")&&typeCount==2)){
+                                eventType=xmlPullParser.next() ;
+                                todayWeather.setType2(xmlPullParser.getText());
+                                typeCount++;
+                            }
+                            //未来第三天
+                            else if ((xmlPullParser.getName().equals("date")&&dateCount==3)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setDate3(xmlPullParser.getText().substring(3));
+                                dateCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("high")&&highCount==3)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setHigh3(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                highCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("low")&&lowCount==3)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setLow3(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                lowCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("type")&&typeCount==3)){
+                                eventType=xmlPullParser.next() ;
+                                todayWeather.setType3(xmlPullParser.getText());
+                                typeCount++;
+                            }
+                            //未来第四天
+                            else if ((xmlPullParser.getName().equals("date")&&dateCount==4)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setDate4(xmlPullParser.getText().substring(3));
+                                dateCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("high")&&highCount==4)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setHigh4(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                highCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("low")&&lowCount==4)){
+                                eventType=xmlPullParser.next();
+                                todayWeather.setLow4(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
+                                lowCount++;
+                            }
+                            else if ((xmlPullParser.getName().equals("type")&&typeCount==4)){
+                                eventType=xmlPullParser.next() ;
+                                todayWeather.setType4(xmlPullParser.getText());
                                 typeCount++;
                             }
                         }
@@ -361,6 +462,21 @@ public class MainActivity extends Activity implements View.OnClickListener{
         windTv.setText(todayWeather.getFengxiang());
         wind_degree_Tv.setText(todayWeather.getFengli());
         weekTv.setText(todayWeather.getDate());//今日星期
+
+        //未来4天的天气信息
+        future1_date.setText(todayWeather.getDate1());
+        future1_type.setText(todayWeather.getType1());
+        future1_range.setText(todayWeather.getLow1()+"~"+todayWeather.getHigh1());
+        future2_date.setText(todayWeather.getDate2());
+        future2_type.setText(todayWeather.getType2());
+        future2_range.setText(todayWeather.getLow2()+"~"+todayWeather.getHigh2());
+        future3_date.setText(todayWeather.getDate3());
+        future3_type.setText(todayWeather.getType3());
+        future3_range.setText(todayWeather.getLow3()+"~"+todayWeather.getHigh3());
+        future4_date.setText(todayWeather.getDate4());
+        future4_type.setText(todayWeather.getType4());
+        future4_range.setText(todayWeather.getLow4()+"~"+todayWeather.getHigh4());
+
         if (todayWeather.getPm25()==null){
             pmDataTv.setText("暂无pm2.5信息");
         }
