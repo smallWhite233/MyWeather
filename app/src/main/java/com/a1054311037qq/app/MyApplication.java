@@ -3,6 +3,7 @@ package com.a1054311037qq.app;
 import android.app.Application;
 import android.os.Environment;
 import android.util.Log;
+import android.content.Context;
 
 import com.a1054311037qq.bean.City;
 import com.a1054311037qq.db.CityDB;
@@ -21,8 +22,9 @@ import java.util.List;
 public class MyApplication extends Application {
     private static final String TAG="MyApp";
     private static MyApplication myApplication;
-    private CityDB mCityDB;
-    private List<City> mCityList;
+    public CityDB mCityDB;
+    private List<City> provinceList;
+    private List<City> allCityList;
 
     @Override
     public void onCreate(){
@@ -34,37 +36,55 @@ public class MyApplication extends Application {
 
     }
     private void initCityList(){
-        mCityList=new ArrayList<City>();
         new Thread(new Runnable(){
             public void run(){
+                prepareProvinceList();
                 prepareCityList();
             }
         }).start();
     }
-    private boolean prepareCityList(){
-        mCityList=mCityDB.getAllCity();
-        int i=0;
-        //在城市列表中遍历寻找该城市
-        for (City city : mCityList){
+    private boolean prepareProvinceList() {
+        provinceList=new ArrayList<City>();
+        provinceList = mCityDB.queryProvinces();//获取省份
+        int i = 0;
+        //遍历省份
+        for (City city : provinceList) {
+            String cityName = city.getProvince();//获取城市名称
+            Log.d(TAG, "省份:" + cityName);//在控制台打印出所有城市
             i++;
-            String cityName=city.getCity();//获取城市名称
-            String cityCode=city.getNumber();//获取城市代码
-            Log.d(TAG,cityCode+":"+cityName);
         }
-        Log.d(TAG,"i="+i);
+        Log.d(TAG, "i=" + i);
         return true;
     }
-    public List<City> getCityList(){
-        return mCityList;
+    private boolean prepareCityList() {
+        allCityList=new ArrayList<City>();
+        allCityList = mCityDB.queryCounties("广西","101030100");//获取所有城市的列表
+        int i = 0;
+        //遍历
+        for (City city : allCityList) {
+            String cityName = city.getCity();//获取城市名称
+            String cityCode = city.getNumber();//获取城市名称
+            Log.d(TAG, "城市:" + cityName+":"+cityCode);//在控制台打印出所有城市
+            i++;
+        }
+        Log.d(TAG, "i=" + i);
+        return true;
     }
 
-    //创建getInstance方法
+    public List<City> getProvinceList(){
+        return provinceList;
+    }
+
+    //创建getInstance方法，单例模式
     public static MyApplication getInstance(){
+        if (myApplication==null){
+            myApplication=new MyApplication();
+        }
         return myApplication;
     }
 
     //创建打开数据库的方法
-    private CityDB openCityDB(){
+    public CityDB openCityDB(){
         String path="/data"+ Environment.getDataDirectory().getAbsolutePath()+ File.separator+getPackageName()+
                 File.separator+"databases1"+File.separator+CityDB.CITY_DB_NAME;//File.separator是文件分隔符,支持跨平台
 

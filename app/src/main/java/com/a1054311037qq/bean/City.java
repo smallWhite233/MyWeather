@@ -7,19 +7,39 @@ package com.a1054311037qq.bean;
 public class City {
     private	String	province;
     private	String	city;
-    private	String	number;
+    private	String	number;//城市代码
     private	String	firstPY;
     private	String	allPY;
     private	String	allFristPY;
 
     //构造函数
-    public City(String province,String city,String number,String firstPY,String allPY,String allFristPY){
+    //public City(String province,String city,String number,String firstPY,String allPY,String allFirstPY){}
+
+    //public City(String province){this.province=province;}
+    public City(){}
+
+    public void setProvince(String province){
         this.province=province;
+    }
+
+    public void setCity(String city){
         this.city=city;
-        this.number=number;
-        this.firstPY=firstPY;
-        this.allPY=allPY;
-        this.allFristPY=allFristPY;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setAllPY(String allPY) {
+        this.allPY = allPY;
+    }
+
+    public void setAllFristPY(String allFristPY) {
+        this.allFristPY = allFristPY;
+    }
+
+    public void setFirstPY(String firstPY) {
+        this.firstPY = firstPY;
     }
 
     public String getProvince(){return province;}

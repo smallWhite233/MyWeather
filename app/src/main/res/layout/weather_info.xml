@@ -193,15 +193,18 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="left">
             <!--日期-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
             <TextView
                 android:id="@+id/future1_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="70dp"
+                android:layout_marginLeft="10dp"
                 android:text="星期日"
-                android:textSize="20dp"
+                android:textSize="18sp"
                 android:textColor="@android:color/white"/>
             <!--天气状况图片-->
             <!-- <ImageView
@@ -211,21 +214,23 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/sunny"/>-->
             <!--天气类型-->
-            <TextView
-                android:id="@+id/future1_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="多云"
-                android:textSize="20sp"
-                android:textColor="@android:color/white"/>
-            <!--温度范围-->
+                    <TextView
+                        android:id="@+id/future1_type"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="60dp"
+                        android:text="多云"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/white"/>
+                    <!--温度范围-->
+            </LinearLayout>
             <TextView
                 android:id="@+id/future1_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:text="-2℃~5℃"
-                android:textSize="20sp"
+                android:layout_marginLeft="20dp"
+                android:text="-2°~5°"
+                android:textSize="18sp"
                 android:textColor="@android:color/white"/>
             </LinearLayout>
             <!--未来第2天-->
@@ -235,15 +240,18 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="left">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
                 <!--日期-->
                 <TextView
                     android:id="@+id/future2_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="70dp"
+                    android:layout_marginLeft="10dp"
                     android:text="星期日"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
                 <!--天气状况图片-->
                 <!-- <ImageView
@@ -253,21 +261,23 @@
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/sunny"/>-->
                 <!--天气类型-->
-                <TextView
-                    android:id="@+id/future2_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="晴"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/white"/>
+                    <TextView
+                        android:id="@+id/future2_type"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="60dp"
+                        android:text="晴"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/white"/>
+                </LinearLayout>
                 <!--温度范围-->
                 <TextView
                     android:id="@+id/future2_temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="20dp"
                     android:text="-2℃~5℃"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
             <!--未来3天-->
@@ -276,15 +286,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="left">
                 <!--日期-->
                 <TextView
                     android:id="@+id/future3_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="70dp"
+                    android:layout_marginLeft="10dp"
                     android:text="星期日"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
                 <!--天气状况图片-->
                 <!-- <ImageView
@@ -296,20 +306,21 @@
                 <!--天气类型-->
                 <TextView
                     android:id="@+id/future3_type"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
+                    android:layout_marginLeft="60dp"
                     android:text="晴"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
                 <!--温度范围-->
                 <TextView
                     android:id="@+id/future3_temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="20dp"
                     android:text="-3℃~5℃"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
             <!--未来第4天-->
@@ -319,15 +330,15 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="left">
                 <!--日期-->
                 <TextView
                     android:id="@+id/future4_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="70dp"
+                    android:layout_marginLeft="10dp"
                     android:text="星期日"
-                    android:textSize="20dp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
                 <!--天气状况图片-->
                 <!-- <ImageView
@@ -339,19 +350,20 @@
                 <!--天气类型-->
                 <TextView
                     android:id="@+id/future4_type"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
                     android:text="晴"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
                 <!--温度范围-->
                 <TextView
                     android:id="@+id/future4_temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="20dp"
                     android:text="-2℃~5℃"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@android:color/white"/>
             </LinearLayout>
             </LinearLayout>
