@@ -27,4 +27,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'//Glide图片加载框架
+
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'//OkHttp网络请求框架
+    compile 'com.squareup.okio:okio:1.11.0'
 }
