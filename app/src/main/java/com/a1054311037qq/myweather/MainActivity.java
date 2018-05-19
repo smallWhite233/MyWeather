@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * onActivityResult函数，接收返回的数据
+     * onActivityResult函数，接收返回的城市数据
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK) {
@@ -218,12 +218,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * @param cityCode 查询天气数据，解析xml数据存到实体类，调用消息机制，更新天气信息
+     * @param cityCode 查询天气数据，解析xml数据存到实体类，调用消息机制，更新展示天气信息
      */
     private void queryWeatherCode(String cityCode) {
         final String address = "http://wthrcdn.etouch.cn/WeatherApi?citykey=" + cityCode;//通过城市id获取其天气的url地址
         Log.d("myWeather", address);
-
+        //缓存去查询天气的城市代码
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
+        editor.putString("cityCode", cityCode);
+        editor.apply();
         //网络请求天气信息
         NetUtil.sendOkHttpRequest(address, new Callback() {
             @Override

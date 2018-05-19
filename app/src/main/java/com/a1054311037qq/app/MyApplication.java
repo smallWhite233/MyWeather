@@ -39,7 +39,6 @@ public class MyApplication extends Application {
         new Thread(new Runnable(){
             public void run(){
                 prepareProvinceList();
-                prepareCityList();
             }
         }).start();
     }
@@ -55,24 +54,6 @@ public class MyApplication extends Application {
         }
         Log.d(TAG, "i=" + i);
         return true;
-    }
-    private boolean prepareCityList() {
-        allCityList=new ArrayList<City>();
-        allCityList = mCityDB.queryCounties("广西","101030100");//获取所有城市的列表
-        int i = 0;
-        //遍历
-        for (City city : allCityList) {
-            String cityName = city.getCity();//获取城市名称
-            String cityCode = city.getNumber();//获取城市名称
-            Log.d(TAG, "城市:" + cityName+":"+cityCode);//在控制台打印出所有城市
-            i++;
-        }
-        Log.d(TAG, "i=" + i);
-        return true;
-    }
-
-    public List<City> getProvinceList(){
-        return provinceList;
     }
 
     //创建getInstance方法，单例模式
