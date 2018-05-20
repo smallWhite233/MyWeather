@@ -2,71 +2,53 @@ package com.a1054311037qq.bean;
 
 /**
  * Created by 晓白 on 2017/2/17.
+ * 未来天气的实体类
  */
 
 public class FutureWeather {
-    private String date1;//未来一天
-    private	String	high1;//最高温
-    private	String	low1;//最低温
-    private	String	type1;//天气类型
+    private String future_date;//日期
+    private	String future_high;//最高温
+    private	String future_low;//最低温
+    private	String future_type;//天气类型
 
-    private String date2;//未来第二天
-    private	String	high2;//最高温
-    private	String	low2;//最低温
-    private	String	type2;//天气类型
-
-    public String getDate1() {return date1;}
-    public void setDate1(String date1) {
-        this.date1 = date1;
-    }
-    public String getHigh1() {
-        return high1;
-    }
-    public void setHigh1(String high1) {
-        this.high1 = high1;
-    }
-    public String getLow1() {
-        return low1;
-    }
-    public void setLow1(String low1) {
-        this.low1 = low1;
-    }
-    public String getType1() {
-        return type1;
-    }
-    public void setType1(String type1) {
-        this.type1 = type1;
+    public String getFuture_date() {
+        return future_date;
     }
 
-    public String getDate2() {
-        return date2;
+    public void setFuture_date(String future_date) {
+        this.future_date = future_date;
     }
-    public void setDate2(String date2) {
-        this.date2 = date2;
+
+    public String getFuture_high() {
+        return future_high;
     }
-    public String getHigh2() { return high2; }
-    public void setHigh2(String high2) {
-        this.high2 = high2;
+
+    public void setFuture_high(String future_high) {
+        this.future_high = future_high;
     }
-    public String getLow2() {
-        return low2;
+
+    public String getFuture_low() {
+        return future_low;
     }
-    public void setLow2(String low2) {
-        this.low2 = low2;
+
+    public void setFuture_low(String future_low) {
+        this.future_low = future_low;
     }
-    public String getType2() {
-        return type2;
+
+    public String getFuture_type() {
+        return future_type;
     }
-    public void setType2(String type2) {
-        this.type2 = type2;
+
+    public void setFuture_type(String future_type) {
+        this.future_type = future_type;
     }
 
     public String toString(){
         return "FutureWeather{"+
-                ", high="+high1+
-                ", low="+low1+
-                ", type="+type1+
-                ", date="+date1+
+                "high="+future_high+
+                ", low="+future_low+
+                ", type="+future_type+
+                ", date="+future_date+
                 '}';
     }
 

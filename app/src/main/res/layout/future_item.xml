@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp">
+        <!--日期-->
+        <TextView
+            android:id="@+id/future1_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="星期日"
+            android:textSize="18sp"
+            android:textColor="#fff"/>
+        <!--天气状况图片-->
+        <!-- <ImageView
+            android:id="@+id/future1_sunny"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/sunny"/>-->
+        <!--天气类型-->
+        <TextView
+            android:id="@+id/future1_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="多云"
+            android:textSize="18sp"
+            android:textColor="#fff"/>
+        <!--温度范围-->
+        <TextView
+            android:id="@+id/future1_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="-2°~5°"
+            android:textSize="18sp"
+            android:textColor="#fff"/>
+</LinearLayout>

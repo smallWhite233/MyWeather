@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,8 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView mSelectCity;
     private ImageView bingPicImg;
     private TextView city_name_Tv, cityTv, timeTv, humidityTv, weekTv, pmDataTv, pmQualityTv, temperatureTv, temperature_range_Tv, climateTv, windTv, wind_degree_Tv;
-    private TextView future1_date, future1_type, future1_range, future2_date, future2_type, future2_range,
+    private TextView future_date, future_type, future_range, future2_date, future2_type, future2_range,
             future3_date, future3_type, future3_range, future4_date, future4_type, future4_range;
+
+    private LinearLayout futureLayout;
 
     private static final int UPDATE_TODAY_WEATHER = 1;//定义一个变量用来判断状态
 
@@ -89,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //天气缓存不为空
         if (weatherInfo != null) {
-            //直接解析
+            //直接解析展示
             TodayWeather todayWeather = ParseData.parseXML(weatherInfo);
             Log.d("缓存：", todayWeather.toString());
             updateTodayWeather(todayWeather);
@@ -134,11 +139,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         windTv = (TextView) findViewById(R.id.wind);//风向
         wind_degree_Tv = (TextView) findViewById(R.id.wind_degree);//风力
         weekTv = (TextView) findViewById(R.id.today_week);//今日星期
-        //未来四天
-        future1_date = (TextView) findViewById(R.id.future1_date);
-        future1_type = (TextView) findViewById(R.id.future1_type);
-        future1_range = (TextView) findViewById(R.id.future1_temperature);
-        future2_date = (TextView) findViewById(R.id.future2_date);
+        //未来天气
+        futureLayout = (LinearLayout) findViewById(R.id.weather_future);//未来几天天气布局
+        future_date = (TextView) findViewById(R.id.future1_date);
+        future_type = (TextView) findViewById(R.id.future1_type);
+        future_range = (TextView) findViewById(R.id.future1_temperature);
+        /*future2_date = (TextView) findViewById(R.id.future2_date);
         future2_type = (TextView) findViewById(R.id.future2_type);
         future2_range = (TextView) findViewById(R.id.future2_temperature);
         future3_date = (TextView) findViewById(R.id.future3_date);
@@ -146,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         future3_range = (TextView) findViewById(R.id.future3_temperature);
         future4_date = (TextView) findViewById(R.id.future4_date);
         future4_type = (TextView) findViewById(R.id.future4_type);
-        future4_range = (TextView) findViewById(R.id.future4_temperature);
+        future4_range = (TextView) findViewById(R.id.future4_temperature);*/
 
         city_name_Tv.setText("N/A");
         //cityTv.setText("N/A");
@@ -339,7 +345,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         wind_degree_Tv.setText(todayWeather.getFengli());
         weekTv.setText(todayWeather.getDate());//今日星期
 
-        //未来4天的天气信息
+        //未来几天的天气展示
+        futureLayout.removeAllViews();
+
+        for(FutureWeather futureWeather : todayWeather.getFutureWeatherList()){
+            Log.d("未来天气：",futureWeather.toString());
+            //把future_item子项添加到futureLayout布局中
+            View view= LayoutInflater.from(this).inflate(R.layout.future_item,futureLayout,false);
+            Log.d("未来1：",futureWeather.getFuture_date());
+
+            TextView future_date = (TextView) findViewById(R.id.future1_date);
+            TextView future_type = (TextView) findViewById(R.id.future1_type);
+            TextView future_range = (TextView) findViewById(R.id.future1_temperature);
+
+            /*future_date.setText("星期八");*/
+
+            /*future_date.setText(futureWeather.getFuture_ date());
+
+            future_type.setText(futureWeather.getFuture_type());
+            Log.d("未来1：",futureWeather.getFuture_type());
+            future_range.setText(futureWeather.getFuture_low()+"~"+futureWeather.getFuture_high());
+
+            */futureLayout.addView(view);
+        }
+       /* //未来4天的天气信息
         future1_date.setText(todayWeather.getDate1());
         future1_type.setText(todayWeather.getType1());
         future1_range.setText(todayWeather.getLow1() + "~" + todayWeather.getHigh1());
@@ -351,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         future3_range.setText(todayWeather.getLow3() + "~" + todayWeather.getHigh3());
         future4_date.setText(todayWeather.getDate4());
         future4_type.setText(todayWeather.getType4());
-        future4_range.setText(todayWeather.getLow4() + "~" + todayWeather.getHigh4());
+        future4_range.setText(todayWeather.getLow4() + "~" + todayWeather.getHigh4());*/
 
         if (todayWeather.getPm25() == null) {
             pmDataTv.setText("暂无pm2.5");

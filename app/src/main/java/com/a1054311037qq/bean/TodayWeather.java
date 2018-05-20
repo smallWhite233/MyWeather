@@ -4,7 +4,13 @@ package com.a1054311037qq.bean;
  * Created by 晓白 on 2017/1/15.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TodayWeather {
+    public List<FutureWeather> futureWeatherList=new ArrayList<>();//未来天气的实体类的集合
+    public List<Suggestion> suggestion=new ArrayList<>();//生活指数的实体类
+
     private	String	city;
     private	String	updatetime;//发布时间
     private	String	wendu;//现在温度
@@ -91,7 +97,25 @@ public class TodayWeather {
     public void setType(String type) {
         this.type = type;
     }
-    //未来第1天
+
+    //未来天气
+    public List<FutureWeather> getFutureWeatherList() {
+        return futureWeatherList;
+    }
+
+    public void setFutureWeatherList(List<FutureWeather> futureWeatherList) {
+        this.futureWeatherList = futureWeatherList;
+    }
+
+    //生活指数
+    public List<Suggestion> getSuggestion() {
+        return suggestion;
+    }
+
+    public void setSuggestion(List<Suggestion> suggestion) {
+        this.suggestion = suggestion;
+    }
+    /*//未来第1天
     private String date1;
     private	String	high1;//最高温
     private	String	low1;//最低温
@@ -198,7 +222,7 @@ public class TodayWeather {
     }
     public void setType4(String type4) {
         this.type4 = type4;
-    }
+    }*/
     @Override
     public String toString(){
         return "TodayWeather{"+"city="+city+
@@ -214,22 +238,22 @@ public class TodayWeather {
                 ", shidu="+shidu+
                 ", date="+date+
 
-                ", date1="+date1+
-                ", type1="+type1+
-                ", future1_high="+high1+
-                ", future1_low="+low1+
-                ", date2="+date2+
-                ", type2="+type2+
-                ", future2_high="+high2+
-                ", future2_low="+low2+
-                ", date3="+date3+
-                ", type3="+type3+
-                ", future3_high="+high3+
-                ", future3_low="+low3+
-                ", date4="+date4+
-                ", type4="+type4+
-                ", future4_high="+high4+
-                ", future4_low="+low4+
+                ", date1="+futureWeatherList.get(0).getFuture_date()+
+                ", type1="+futureWeatherList.get(0).getFuture_type()+
+                ", future1_high="+futureWeatherList.get(0).getFuture_high()+
+                ", future1_low="+futureWeatherList.get(0).getFuture_low()+
+                ", date2="+futureWeatherList.get(1).getFuture_date()+
+                ", type2="+futureWeatherList.get(1).getFuture_type()+
+                ", future2_high="+futureWeatherList.get(1).getFuture_high()+
+                ", future2_low="+futureWeatherList.get(1).getFuture_low()+
+                ", date3="+futureWeatherList.get(2).getFuture_date()+
+                ", type3="+futureWeatherList.get(2).getFuture_type()+
+                ", future3_high="+futureWeatherList.get(2).getFuture_high()+
+                ", future3_low="+futureWeatherList.get(2).getFuture_low()+
+                ", date4="+futureWeatherList.get(3).getFuture_date()+
+                ", type4="+futureWeatherList.get(3).getFuture_type()+
+                ", future4_high="+futureWeatherList.get(3).getFuture_high()+
+                ", future4_low="+futureWeatherList.get(3).getFuture_low()+
                 '}';
     }
 }
