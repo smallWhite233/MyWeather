@@ -10,7 +10,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:text="星期日"
+            android:text="星期天"
             android:textSize="18sp"
             android:textColor="#fff"/>
         <!--天气状况图片-->
@@ -28,7 +28,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="多云"
+            android:text="晴"
             android:textSize="18sp"
             android:textColor="#fff"/>
         <!--温度范围-->

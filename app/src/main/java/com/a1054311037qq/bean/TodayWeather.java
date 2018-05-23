@@ -11,6 +11,7 @@ public class TodayWeather {
     public List<FutureWeather> futureWeatherList=new ArrayList<>();//未来天气的实体类的集合
     public List<Suggestion> suggestion=new ArrayList<>();//生活指数的实体类
 
+    //今日天气
     private	String	city;
     private	String	updatetime;//发布时间
     private	String	wendu;//现在温度
@@ -115,114 +116,7 @@ public class TodayWeather {
     public void setSuggestion(List<Suggestion> suggestion) {
         this.suggestion = suggestion;
     }
-    /*//未来第1天
-    private String date1;
-    private	String	high1;//最高温
-    private	String	low1;//最低温
-    private	String	type1;//天气类型
-    public String getDate1() {return date1;}
-    public void setDate1(String date1) {
-        this.date1 = date1;
-    }
-    public String getHigh1() {
-        return high1;
-    }
-    public void setHigh1(String high1) {
-        this.high1 = high1;
-    }
-    public String getLow1() {
-        return low1;
-    }
-    public void setLow1(String low1) {
-        this.low1 = low1;
-    }
-    public String getType1() {
-        return type1;
-    }
-    public void setType1(String type1) {
-        this.type1 = type1;
-    }
-    //未来第2天
-    private String date2;
-    private	String	high2;//最高温
-    private	String	low2;//最低温
-    private	String	type2;//天气类型
-    public String getDate2() {return date2;}
-    public void setDate2(String date2) {
-        this.date2 = date2;
-    }
-    public String getHigh2() {
-        return high2;
-    }
-    public void setHigh2(String high2) {
-        this.high2 = high2;
-    }
-    public String getLow2() {
-        return low2;
-    }
-    public void setLow2(String low2) {
-        this.low2 = low2;
-    }
-    public String getType2() {
-        return type1;
-    }
-    public void setType2(String type2) {
-        this.type2 = type2;
-    }
-    //未来第3天
-    private String date3;
-    private String high3;//最高温
-    private String low3;//最低温
-    private String type3;//天气类型
-    public String getDate3() {return date3;}
-    public void setDate3(String date3) {
-        this.date3 = date3;
-    }
-    public String getHigh3() {
-        return high3;
-    }
-    public void setHigh3(String high3) {
-        this.high3 = high3;
-    }
-    public String getLow3() {
-        return low3;
-    }
-    public void setLow3(String low3) {
-        this.low3 = low3;
-    }
-    public String getType3() {
-        return type1;
-    }
-    public void setType3(String type3) {
-        this.type3 = type3;
-    }
-    //未来第4天
-    private String date4;
-    private String high4;//最高温
-    private String low4;//最低温
-    private String type4;//天气类型
-    public String getDate4() {return date4;}
-    public void setDate4(String date4) {
-        this.date4 = date4;
-    }
-    public String getHigh4() {
-        return high4;
-    }
-    public void setHigh4(String high4) {
-        this.high4 = high4;
-    }
-    public String getLow4() {
-        return low4;
-    }
-    public void setLow4(String low4) {
-        this.low4 = low4;
-    }
-    public String getType4() {
-        return type1;
-    }
-    public void setType4(String type4) {
-        this.type4 = type4;
-    }*/
+
     @Override
     public String toString(){
         return "TodayWeather{"+"city="+city+

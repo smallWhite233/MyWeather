@@ -3,11 +3,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<!--展示城市的碎片界面-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
+        android:layout_height="70dp"
+        android:background="?attr/colorPrimary"
+        android:fitsSystemWindows="true"><!--标题栏为系统状态栏留出空间，沉浸式-->
 
         <TextView
             android:id="@+id/title_text"
@@ -15,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="#fff"
+            android:text="中国"
             android:textSize="20sp"/>
 
         <Button

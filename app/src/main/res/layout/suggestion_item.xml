@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/zhishu_item"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp">
+        <TextView
+            android:id="@+id/zhishu_name_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:textColor="#fff"
+            android:text="晨练指数：较适宜"
+            android:textSize="15sp"/>
 
+        <TextView
+            android:id="@+id/zhishu_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:textColor="#fff"
+            android:text="今天适合晨跑运动"
+            android:textSize="15sp"/>
 </LinearLayout>

@@ -8,16 +8,18 @@
     android:background="#8000">
 
     <TextView
+        android:id="@+id/suggestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="生活建议"
         android:textColor="#fff"
         android:textSize="20sp"/>
-    <TextView
-        android:id="@+id/zhishu_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:textColor="#fff"/>
+    <LinearLayout
+        android:id="@+id/zhishu_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
 
 </LinearLayout>

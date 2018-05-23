@@ -9,7 +9,7 @@
     <application
         android:name="com.a1054311037qq.app.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/weather_logo"
         android:label="MyWeather"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

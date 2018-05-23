@@ -88,97 +88,8 @@ public class ParseData {
                                 eventType = xmlPullParser.next();
                                 todayWeather.setFengli(xmlPullParser.getText());
                                 fengliCount++;
-                            } /*else if ((xmlPullParser.getName().equals("date") && dateCount == 0)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setDate(xmlPullParser.getText().substring(3));//去掉几日，只保留星期
-                                dateCount++;
-                            } else if ((xmlPullParser.getName().equals("high") && highCount == 0)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setHigh(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                highCount++;
-                            } else if ((xmlPullParser.getName().equals("low") && lowCount == 0)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setLow(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                lowCount++;
-                            } else if ((xmlPullParser.getName().equals("type") && typeCount == 0)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setType(xmlPullParser.getText());
-                                typeCount++;
                             }
-                            //未来第一天
-                            else if ((xmlPullParser.getName().equals("date") && dateCount == 1)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setDate1(xmlPullParser.getText().substring(3));
-                                dateCount++;
-                            } else if ((xmlPullParser.getName().equals("high") && highCount == 1)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setHigh1(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                highCount++;
-                            } else if ((xmlPullParser.getName().equals("low") && lowCount == 1)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setLow1(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                lowCount++;
-                            } else if ((xmlPullParser.getName().equals("type") && typeCount == 1)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setType1(xmlPullParser.getText());
-                                typeCount++;
-                            }
-                            //未来第二天
-                            else if ((xmlPullParser.getName().equals("date") && dateCount == 2)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setDate2(xmlPullParser.getText().substring(3));
-                                dateCount++;
-                            } else if ((xmlPullParser.getName().equals("high") && highCount == 2)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setHigh2(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                highCount++;
-                            } else if ((xmlPullParser.getName().equals("low") && lowCount == 2)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setLow2(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                lowCount++;
-                            } else if ((xmlPullParser.getName().equals("type") && typeCount == 2)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setType2(xmlPullParser.getText());
-                                typeCount++;
-                            }
-                            //未来第三天
-                            else if ((xmlPullParser.getName().equals("date") && dateCount == 3)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setDate3(xmlPullParser.getText().substring(3));
-                                dateCount++;
-                            } else if ((xmlPullParser.getName().equals("high") && highCount == 3)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setHigh3(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                highCount++;
-                            } else if ((xmlPullParser.getName().equals("low") && lowCount == 3)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setLow3(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                lowCount++;
-                            } else if ((xmlPullParser.getName().equals("type") && typeCount == 3)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setType3(xmlPullParser.getText());
-                                typeCount++;
-                            }
-                            //未来第四天
-                            else if ((xmlPullParser.getName().equals("date") && dateCount == 4)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setDate4(xmlPullParser.getText().substring(3));
-                                dateCount++;
-                            } else if ((xmlPullParser.getName().equals("high") && highCount == 4)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setHigh4(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                highCount++;
-                            } else if ((xmlPullParser.getName().equals("low") && lowCount == 4)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setLow4(xmlPullParser.getText().substring(2).trim());//去掉汉字和摄氏度符号
-                                lowCount++;
-                            } else if ((xmlPullParser.getName().equals("type") && typeCount == 4)) {
-                                eventType = xmlPullParser.next();
-                                todayWeather.setType4(xmlPullParser.getText());
-                                typeCount++;
-                            }*/
-                            //循环解析天气信息
-
+                            //特别解析今天和未来几天的天气信息
                                     else if (xmlPullParser.getName().equals("date")) {
                                         eventType = xmlPullParser.next();
                                         if (dateCount == 0) {//今天日期
@@ -263,7 +174,7 @@ public class ParseData {
                 eventType = xmlPullParser.next();
             }
 
-            //将未来天气分别添加
+            //将未来天气子项分别添加到list
             for (int i=0;i<4;i++){
                 FutureWeather a=new FutureWeather();
                 a.setFuture_date(list_date.get(i).getFuture_date());
@@ -273,7 +184,7 @@ public class ParseData {
                 list_future.add(a);
                 Log.d("未来日期：",a.toString());
             }
-            //将未来几天的天气集合list添加到todayWeather实体类中
+            //将未来几天的天气list添加到todayWeather实体类中
             todayWeather.setFutureWeatherList(list_future);
             //添加生活建议的指数
             for(Suggestion s:list_zhishu){

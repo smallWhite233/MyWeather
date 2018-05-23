@@ -19,8 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a1054311037qq.bean.Suggestion;
 import com.a1054311037qq.bean.TodayWeather;
 import com.a1054311037qq.bean.FutureWeather;
+import com.a1054311037qq.service.AutoUpdateService;
 import com.a1054311037qq.util.NetUtil;
 import com.a1054311037qq.util.ParseData;
 import com.bumptech.glide.Glide;
@@ -43,14 +45,13 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private ImageView mUpdateBtn;
-    private ImageView mSelectCity;
+    private ImageView mUpdateBtn,mSelectCity,mLocation;
     private ImageView bingPicImg;
     private TextView city_name_Tv, cityTv, timeTv, humidityTv, weekTv, pmDataTv, pmQualityTv, temperatureTv, temperature_range_Tv, climateTv, windTv, wind_degree_Tv;
-    private TextView future_date, future_type, future_range, future2_date, future2_type, future2_range,
-            future3_date, future3_type, future3_range, future4_date, future4_type, future4_range;
 
-    private LinearLayout futureLayout;
+    private LinearLayout futureLayout;//未来天气
+
+    private LinearLayout zhishuLayout;//生活指数
 
     private static final int UPDATE_TODAY_WEATHER = 1;//定义一个变量用来判断状态
 
@@ -78,12 +79,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         //实现背景图和状态栏融合，Android5.0以上支持
         if(Build.VERSION.SDK_INT>=21){
-            View decorView=getWindow().getDecorView();
+            View decorView=getWindow().getDecorView();//获取当前活动的decorview
             decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);//表示活动的布局会显示在状态栏上面
+            getWindow().setStatusBarColor(Color.TRANSPARENT);//将状态栏设置成透明色
         }
         setContentView(R.layout.weather_info);//加载界面
+
         //初始化控件
         initView();
 
@@ -118,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mUpdateBtn.setOnClickListener(this);
         //选择城市的监听器
         mSelectCity.setOnClickListener(this);
+        //定位的点击监听
+        mLocation.setOnClickListener(this);
     }
 
     /**
@@ -126,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void initView() {
         mSelectCity = (ImageView) findViewById(R.id.title_city_manager);
         mUpdateBtn = (ImageView) findViewById(R.id.title_update_btn);
+        mLocation = (ImageView) findViewById(R.id.title_location);
         bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);//背景图片
         city_name_Tv = (TextView) findViewById(R.id.title_city_name);//某某城市
         //cityTv = (TextView) findViewById(R.id.city);//城市名
@@ -141,18 +146,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         weekTv = (TextView) findViewById(R.id.today_week);//今日星期
         //未来天气
         futureLayout = (LinearLayout) findViewById(R.id.weather_future);//未来几天天气布局
-        future_date = (TextView) findViewById(R.id.future1_date);
-        future_type = (TextView) findViewById(R.id.future1_type);
-        future_range = (TextView) findViewById(R.id.future1_temperature);
-        /*future2_date = (TextView) findViewById(R.id.future2_date);
-        future2_type = (TextView) findViewById(R.id.future2_type);
-        future2_range = (TextView) findViewById(R.id.future2_temperature);
-        future3_date = (TextView) findViewById(R.id.future3_date);
-        future3_type = (TextView) findViewById(R.id.future3_type);
-        future3_range = (TextView) findViewById(R.id.future3_temperature);
-        future4_date = (TextView) findViewById(R.id.future4_date);
-        future4_type = (TextView) findViewById(R.id.future4_type);
-        future4_range = (TextView) findViewById(R.id.future4_temperature);*/
+        //生活建议
+        zhishuLayout =(LinearLayout) findViewById(R.id.zhishu_layout);
 
         city_name_Tv.setText("N/A");
         //cityTv.setText("N/A");
@@ -196,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // 跳转到SelectCity活动
             Intent intent = new Intent(this, SelectCity.class);
             startActivityForResult(intent, 1);//1是请求码requestCode
+        }
+        //定位
+        if (view.getId() == R.id.title_location) {
+            Toast.makeText(MainActivity.this, "定位暂不可用，后续努力加上哈", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -333,10 +332,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * updateTodayWeather方法处理实体类中的数据，展示天气信息到组件
      */
-    public void updateTodayWeather(TodayWeather todayWeather) {
-        city_name_Tv.setText(todayWeather.getCity());
-        //cityTv.setText(todayWeather.getCity());
+    private void updateTodayWeather(TodayWeather todayWeather) {
         timeTv.setText(todayWeather.getUpdatetime());//发布时间
+        //今日天气展示
+        city_name_Tv.setText(todayWeather.getCity());
         humidityTv.setText(todayWeather.getShidu());
         climateTv.setText(todayWeather.getType());
         temperatureTv.setText(todayWeather.getWendu() + "°");//当前温度
@@ -344,44 +343,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         windTv.setText(todayWeather.getFengxiang());
         wind_degree_Tv.setText(todayWeather.getFengli());
         weekTv.setText(todayWeather.getDate());//今日星期
-
-        //未来几天的天气展示
-        futureLayout.removeAllViews();
-
-        for(FutureWeather futureWeather : todayWeather.getFutureWeatherList()){
-            Log.d("未来天气：",futureWeather.toString());
-            //把future_item子项添加到futureLayout布局中
-            View view= LayoutInflater.from(this).inflate(R.layout.future_item,futureLayout,false);
-            Log.d("未来1：",futureWeather.getFuture_date());
-
-            TextView future_date = (TextView) findViewById(R.id.future1_date);
-            TextView future_type = (TextView) findViewById(R.id.future1_type);
-            TextView future_range = (TextView) findViewById(R.id.future1_temperature);
-
-            /*future_date.setText("星期八");*/
-
-            /*future_date.setText(futureWeather.getFuture_ date());
-
-            future_type.setText(futureWeather.getFuture_type());
-            Log.d("未来1：",futureWeather.getFuture_type());
-            future_range.setText(futureWeather.getFuture_low()+"~"+futureWeather.getFuture_high());
-
-            */futureLayout.addView(view);
-        }
-       /* //未来4天的天气信息
-        future1_date.setText(todayWeather.getDate1());
-        future1_type.setText(todayWeather.getType1());
-        future1_range.setText(todayWeather.getLow1() + "~" + todayWeather.getHigh1());
-        future2_date.setText(todayWeather.getDate2());
-        future2_type.setText(todayWeather.getType2());
-        future2_range.setText(todayWeather.getLow2() + "~" + todayWeather.getHigh2());
-        future3_date.setText(todayWeather.getDate3());
-        future3_type.setText(todayWeather.getType3());
-        future3_range.setText(todayWeather.getLow3() + "~" + todayWeather.getHigh3());
-        future4_date.setText(todayWeather.getDate4());
-        future4_type.setText(todayWeather.getType4());
-        future4_range.setText(todayWeather.getLow4() + "~" + todayWeather.getHigh4());*/
-
         if (todayWeather.getPm25() == null) {
             pmDataTv.setText("暂无pm2.5");
         } else {
@@ -389,7 +350,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         pmQualityTv.setText(todayWeather.getQuality());
 
+        //未来几天的天气展示
+        futureLayout.removeAllViews();
+        for(FutureWeather futureWeather : todayWeather.getFutureWeatherList()){
+            Log.d("未来天气：",futureWeather.toString());
+            //动态加载future_item子布局
+            View view= LayoutInflater.from(this).inflate(R.layout.future_item,futureLayout,false);
+            //子布局里设置相应数据
+            TextView future_date=(TextView) view.findViewById(R.id.future1_date);
+            TextView future_type=(TextView) view.findViewById(R.id.future1_type);
+            TextView future_range=(TextView) view.findViewById(R.id.future1_temperature);
+            future_date.setText(futureWeather.getFuture_date());
+            future_type.setText(futureWeather.getFuture_type());
+            future_range.setText(futureWeather.getFuture_low()+"~"+futureWeather.getFuture_high());
+
+            futureLayout.addView(view);
+        }
+        //生活建议展示
+        zhishuLayout.removeAllViews();//先移除子布局
+        for (Suggestion s:todayWeather.getSuggestion()){
+            Log.d("生活建议：",s.toString());
+            View view= LayoutInflater.from(this).inflate(R.layout.suggestion_item,zhishuLayout,false);//动态加载子布局
+            //子布局里设置相应数据
+            TextView zhishu_name=(TextView) view.findViewById(R.id.zhishu_name_value);
+            //TextView zhishu_value=(TextView) view.findViewById(R.id.zhishu_value);
+            TextView zhishu_detail=(TextView) view.findViewById(R.id.zhishu_detail);
+            zhishu_name.setText(s.getZhishu_name()+"："+s.getZhishu_value());
+            //zhishu_value.setText(s.getZhishu_value());
+            zhishu_detail.setText(s.getZhishu_detail());
+            //再添加到父布局中
+            zhishuLayout.addView(view);
+        }
         Toast.makeText(MainActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
+
+        //激活后台自动更新服务
+        if (todayWeather !=null){
+            Intent intent=new Intent(this, AutoUpdateService.class);
+            startService(intent);
+        }else{
+            Toast.makeText(MainActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

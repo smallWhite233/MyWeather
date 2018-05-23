@@ -33,4 +33,12 @@ public class Suggestion {
     public void setZhishu_detail(String zhishu_detail) {
         this.zhishu_detail = zhishu_detail;
     }
+
+    public String toString(){
+        return "Suggestion{"+
+                "name="+zhishu_name+
+                ",value="+zhishu_value+
+                ", detail="+zhishu_detail+
+                '}';
+    }
 }
